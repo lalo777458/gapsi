@@ -1,0 +1,116 @@
+<div class="container">
+    <div *ngIf="!bienvenido">
+        <div class="d-flex justify-content-center">
+            <img src="/assets/img/lalo.png" alt="" id="circle">
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <span id="title">
+                {{title}}
+            </span>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            <button type="button" class="btn btn-info" (click)="continuar()">Continuar</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-auto me-auto">
+
+        </div>
+        <div class="col-auto">
+            <p-button label="Agregar" [raised]="true" (click)="openModal('Nuevo proveedor',null)"></p-button>
+        </div>
+    </div>
+
+    <div *ngIf="bienvenido" class="mt-4">
+        <p-table [value]="proveedores" class="table table-striped table-hover">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th>Razón social</th>
+                    <th scope="col">Dirección</th>
+                    <th scope="col">Nomina</th>
+                    <th scope="col">Estatus</th>
+                    <th style="text-align: center;">Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-p>
+                <tr>
+                    <td>{{p.nombre}}</td>
+                    <td>{{p.apellidos}}</td>
+                    <td>{{p.razonSocial}}</td>
+                    <td>{{p.direccion}}</td>
+                    <td>{{p.nomina}}</td>
+                    <td>{{p.estatus === true ? 'ACTIVO' : 'INACTIVO'}}</td>
+                    <td style="text-align: center;">
+                        <button class="btn" (click)="openModal('Editar proveedor', p)"><i
+                                class='bx bxs-edit-alt'></i></button>
+                        <button class="btn" (click)="eliminar(p.idProveedor)"><i class='bx bxs-trash-alt' ></i></button>
+                    </td>
+                </tr>
+
+            </ng-template>
+        </p-table>
+    </div>
+
+    <div class="card flex justify-content-center">
+        <form [formGroup]="formPro" (ngSubmit)="guardar()">
+
+            <p-dialog header="Header" [(visible)]="visible" [responsive]="true" [resizable]="true"
+                [style]="{ width: '40vw'}" [baseZIndex]="10000" [minY]="70" [minX]="70" [focusOnShow]="true"
+                [draggable]="true" [modal]="true">
+                <ng-template pTemplate="header">
+                    <label class="text-md font-bold">{{titleForm}}</label>
+                </ng-template>
+                <div class="row g-3">
+                    <div class="col-4 col-sm-12 col-md-6">
+                        <label htmlFor="nombre">Nombre</label>
+                        <input pInputText aria-describedby="nombre-help" class="p-inputtext-md col-12"
+                            formControlName="nombre" />
+                    </div>
+
+                    <div class="col-4 col-sm-12 col-md-6">
+                        <label htmlFor="apellidos">Apellidos</label>
+                        <input pInputText aria-describedby="apellidos-help" class="p-inputtext-md col-12"
+                            formControlName="apellidos" />
+                    </div>
+
+                    <div class="col-4 col-sm-12 col-md-6">
+                        <label htmlFor="razonSocial">Razon Social</label>
+                        <input pInputText aria-describedby="razonSocial-help" class="p-inputtext-md col-12"
+                            formControlName="razonSocial" />
+                    </div>
+
+                    <div class="col-4 col-sm-12 col-md-6">
+                        <label htmlFor="direccion">Dirección</label>
+                        <input pInputText aria-describedby="direccion-help" class="p-inputtext-md col-12"
+                            formControlName="direccion" />
+                    </div>
+
+                    <div class="col-4 col-sm-12 col-md-6">
+                        <label htmlFor="nomina">Nomina</label>
+                        <input type="number" aria-describedby="nomina-help" class="p-inputtext-md col-12"
+                            formControlName="nomina" />
+
+                    </div>
+                    <div class="col-4 col-sm-12 col-md-6">
+                        <label htmlFor="nomina" class="col-12">Estatus</label>
+                        <p-inputSwitch formControlName="estatus"></p-inputSwitch>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <p-button *ngIf="!editar" (click)="guardar()" label="Guardar" styleClass="p-button-text"
+                            [disabled]="!formPro.valid"></p-button>
+                        <p-button *ngIf="editar" (click)="guardar()" severity="info" label="Actualizar"
+                            styleClass="p-button-text" [disabled]="!formPro.valid"></p-button>
+                    </div>
+                </div>
+            </p-dialog>
+        </form>
+    </div>
+</div>
+<p-toast></p-toast>
